@@ -1,6 +1,13 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Signup = () => {
+  const [formData, setFormData] = useState({});
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
   return (
     <div className="max-w-lg mx-auto p-3">
       <h1 className="text-3xl font-semibold text-center my-7">Sign Up</h1>
@@ -10,6 +17,7 @@ const Signup = () => {
           placeholder="Username"
           id="username"
           className="bg-slate-100 p-3 rounded-lg"
+          onChange={handleChange}
         />
 
         <input
@@ -17,6 +25,7 @@ const Signup = () => {
           placeholder="Email"
           id="email"
           className="bg-slate-100 p-3 rounded-lg"
+          onChange={handleChange}
         />
 
         <input
@@ -24,6 +33,7 @@ const Signup = () => {
           placeholder="Password"
           id="password"
           className="bg-slate-100 p-3 rounded-lg"
+          onChange={handleChange}
         />
 
         <button className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
