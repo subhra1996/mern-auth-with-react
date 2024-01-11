@@ -58,8 +58,6 @@ export const google = async (req, res, next) => {
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
       const newUserName = req.body.name.split(' ').join('').toLowerCase() + Math.random().toString(36).slice(-8);
 
-      console.log(newUserName);
-
       const newUser = new User({
         username: newUserName,
         email: req.body.email,
