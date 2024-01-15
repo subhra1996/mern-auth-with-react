@@ -12,6 +12,10 @@ import {
   updateUserSuccess,
   updateUserFailure,
   signInFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
+  signOutSuccess
 } from "../redux/user/userSlice";
 
 const Profile = () => {
@@ -62,6 +66,7 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setUpdateSuccess(false);
     try {
       dispatch(updateUserStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
@@ -74,7 +79,7 @@ const Profile = () => {
 
       const data = await res.json();
 
-      if(data.success= false){
+      if ((data.success = false)) {
         dispatch(updateUserFailure(data));
         return;
       }
@@ -83,6 +88,34 @@ const Profile = () => {
       setUpdateSuccess(true);
     } catch (error) {
       dispatch(signInFailure(error));
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    } catch (error) {
+      dispatch(deleteUserFailure(error));
+    }
+  };
+
+  const handleSignout = async () => {
+    try{
+      await fetch('/api/auth/signout');
+      dispatch(signOutSuccess());
+    }
+    catch(error){
+      console.log(error);
     }
   };
   return (
@@ -130,12 +163,13 @@ const Profile = () => {
           onChange={handleChange}
         />
         <input
+          disabled
           type="email"
           id="email"
           placeholder="Email"
           defaultValue={currentUser.email}
           className="bg-slate-100 p-3 rounded-lg"
-          onChange={handleChange}
+          // onChange={handleChange}
         />
         <input
           type="password"
@@ -144,19 +178,25 @@ const Profile = () => {
           className="bg-slate-100 p-3 rounded-lg"
           onChange={handleChange}
         />
-        <button disabled={loading} className="bg-slate-700 text-white p-3 uppercase hover:opacity-95 disabled:opacity-80 rounded-lg">
+        <button
+          disabled={loading}
+          className="bg-slate-700 text-white p-3 uppercase hover:opacity-95 disabled:opacity-80 rounded-lg"
+        >
           {loading ? "Loading..." : "Update"}
         </button>
       </form>
       <div className="flex justify-between mt-5">
-        <span className="text-red-700 cursor-pointer">Delete Account</span>
-        <span className="text-red-700 cursor-pointer">Sign out</span>
+        <span
+          className="text-red-700 cursor-pointer"
+          onClick={handleDeleteAccount}
+        >
+          Delete Account
+        </span>
+        <span onClick={handleSignout} className="text-red-700 cursor-pointer">Sign out</span>
       </div>
-      <p className="text-red-700 mt-5">
-        {error && 'something went wrong!' }
-      </p>
+      <p className="text-red-700 mt-5">{error && "something went wrong!"}</p>
       <p className="text-green-700 mt-5">
-        {updateSuccess && 'User is updated successfully' }
+        {updateSuccess && "User is updated successfully"}
       </p>
     </div>
   );
