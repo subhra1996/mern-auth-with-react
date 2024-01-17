@@ -4,6 +4,7 @@ import {
   signInStart,
   signInSuccess,
   signInFailure,
+  signInNavigate
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import OAuth from "../components/OAuth";
@@ -11,7 +12,7 @@ import OAuth from "../components/OAuth";
 const Signup = () => {
   const [formData, setFormData] = useState({});
 
-  const { loading, error } = useSelector((state) => state.user);
+  let { loading, error } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -47,6 +48,10 @@ const Signup = () => {
     }
   };
 
+  const handleNavigate = ()=>{
+      dispatch(signInNavigate());
+  };
+
   return (
     <div className="max-w-lg mx-auto p-3">
       <h1 className="text-3xl font-semibold text-center my-7">Sign In</h1>
@@ -78,7 +83,7 @@ const Signup = () => {
       </form>
       <div className="flex gap-2 mt-5">
         <p>Have an Account?</p>
-        <Link to="/sign-up">
+        <Link to="/sign-up" onClick={handleNavigate}>
           <span className="text-blue-500">Sign up</span>
         </Link>
       </div>
