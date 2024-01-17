@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
+import { signUpError } from "../constants/const";
 
 const Signup = () => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [message, setMessage] = useState(null);
 
   const navigate = useNavigate();
 
@@ -32,6 +34,8 @@ const Signup = () => {
       setLoading(false);
       if(data.success===false){
         setError(true);
+        setMessage(data.message);
+        return;
       }
 
       navigate('/sign-in');
@@ -84,7 +88,7 @@ const Signup = () => {
         </Link>
       </div>
 
-      <p className="text-red-700 mt-5">{error && 'Something went wrong!'}</p>
+      <p className="text-red-700 mt-5">{error && message=== signUpError ? signUpError : error ? "Something went wrong!": ""}</p>
     </div>
   );
 };

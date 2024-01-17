@@ -131,6 +131,7 @@ const Profile = () => {
             setImage(e.target.files[0]);
             setImageError(false);
             setFormData({ ...formData, profilePicture: "" });
+            setUpdateSuccess(false);
           }}
         />
         <img

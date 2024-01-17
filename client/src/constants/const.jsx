@@ -1,0 +1,1 @@
+export const signUpError = "Email is already registered!";
